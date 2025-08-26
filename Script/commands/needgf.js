@@ -3,8 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const https = require("https");
 
-const encodedUrl = "aHR0cHM6Ly9yYXNpbi14LWFwaXMub25yZW5kZXIuY29tL2FwaS9yYXNpbi9nZg==";
-const encodedKey = "cnNfdDFnM2Izc2EtOXloZS1ja3g3LTlvdzEtcnA=";
+const encodedUrl = "aHR0cHM6Ly9yYXNpbi1hcGlzLm9ucmVuZGVyLmNvbQ==";
+const encodedKey = "cnNfaGVpNTJjbTgtbzRvai11Y2ZjLTR2N2MtZzE=";
 
 function decode(b64) {
  return Buffer.from(b64, "base64").toString("utf-8");
@@ -40,7 +40,7 @@ module.exports.run = async function ({ api, event }) {
  try {
  const apiUrl = decode(encodedUrl);
  const apiKey = decode(encodedKey);
- const fullUrl = `${apiUrl}?apikey=${apiKey}`;
+ const fullUrl = `${apiUrl}/api/rasin/gf?apikey=${apiKey}`;
 
  const res = await axios.get(fullUrl);
  const title = res.data.data.title;
@@ -56,6 +56,6 @@ module.exports.run = async function ({ api, event }) {
 
  } catch (err) {
  console.error("❌ Image fetch error:", err.message);
- api.sendMessage("", event.threadID, event.messageID);
+ api.sendMessage("⚠️ ", event.threadID, event.messageID);
  }
 };
