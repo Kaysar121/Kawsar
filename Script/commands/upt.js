@@ -18,7 +18,7 @@ module.exports.run = async function ({ api, event, args }) {
 
  const name = args[0];
  const url = args[1];
- const interval = 300; // auto default 5 minutes
+ const interval = 150; // auto default 5 minutes
 
  if (!url.startsWith("http")) {
  return api.sendMessage("❌ Please provide a valid URL!", event.threadID, event.messageID);
