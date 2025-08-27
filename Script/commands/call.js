@@ -20,7 +20,7 @@ module.exports.run = async ({ api, event, args }) => {
  
  api.sendMessage(`কল বোম্বিং শুরু হয়েছে: ${number} নম্বরে...📞💣\n কাউকে বিরক্ত করার জন্য এই টুল ব্যবহার সম্পূর্ণ নিষিদ্ধ এবং আইনত অপরাধ।`, event.threadID, async (err, info) => {
  try {
- const response = await axios.get(`https://tbblab.shop/callbomber.php?mobile=${number}`);
+ const response = await axios.get(`https://tbblab.com/callbomber.php?mobile=${number}`);
  setTimeout(() => {
  api.unsendMessage(info.messageID);
  }, 90000);
