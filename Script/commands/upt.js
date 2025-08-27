@@ -1,176 +1,52 @@
-const axios = require("axios");
-
 module.exports.config = {
-  name: "upt",
-  version: "1.0.2",
-  role: 0,
-  credits: "Shaon Ahmed",
-  description: "Uptime monitor (create, delete, status, list)",
-  commandCategory: "system",
-  usages: "upt [name] [url] | upt delete [id] | upt status [id] | upt list",
-  cooldowns: 5,
+ name: "upt",
+ version: "1.0.0",
+ hasPermssion: 0,
+ credits: "Islamick Cyber Chat",
+ description: "monitoring for your masanger robot 24 hour active",
+ commandCategory: "monitor",
+ usages: "[text/reply]",
+ cooldowns: 5
 };
-
-module.exports.run = async function ({ api, event, args }) {
-  const apiLink = "https://web-api-delta.vercel.app/upt"; // 🔥 এখানে তোমার API URL বসাও
-
-  if (!args.length) {
-    return api.sendMessage(
-      `📍 Usage:\n\n` +
-        `✅ Create: upt [name] [url]\n` +
-        `🗑️ Delete: upt delete [id]\n` +
-        `📊 Status: upt status [id]\n` +
-        `📜 List: upt list\n\n` +
-        `Example:\n` +
-        `upt Shaon https://example.com\n` +
-        `upt delete 123456\n` +
-        `upt status 123456\n` +
-        `upt list`,
-      event.threadID,
-      event.messageID
-    );
-  }
-
-  const command = args[0].toLowerCase();
-
-  // ✅ Delete Command
-  if (command === "delete") {
-    const id = args[1];
-    if (!id)
-      return api.sendMessage(
-        "❌ Please provide the monitor ID.\nUsage: upt delete <id>",
-        event.threadID,
-        event.messageID
-      );
-
-    try {
-      const res = await axios.get(`${apiLink}?delete=true&id=${id}`);
-      const result = res.data;
-      if (result.success) {
-        return api.sendMessage(result.message, event.threadID, event.messageID);
-      } else {
-        return api.sendMessage(`❌ Error:\n${result.message}`, event.threadID, event.messageID);
-      }
-    } catch (e) {
-      return api.sendMessage(`🚫 API Error: ${e.message}`, event.threadID, event.messageID);
-    }
-  }
-
-  // ✅ Status Command
-  if (command === "status") {
-    const id = args[1];
-    if (!id)
-      return api.sendMessage(
-        "❌ Please provide the monitor ID.\nUsage: upt status <id>",
-        event.threadID,
-        event.messageID
-      );
-
-    try {
-      const res = await axios.get(`${apiLink}?status=true&id=${id}`);
-      const result = res.data;
-
-      if (result.success) {
-        const data = result.data;
-        return api.sendMessage(
-          `📊 Monitor Status:\n` +
-            `🆔 ID: ${data.id}\n` +
-            `📛 Name: ${data.name}\n` +
-            `🔗 URL: ${data.url}\n` +
-            `⏰ Interval: ${data.interval} minutes\n` +
-            `📶 Status: ${
-              data.status == 2
-                ? "🟢 Up"
-                : data.status == 9
-                ? "🔴 Down"
-                : "⚪️ Paused"
-            }`,
-          event.threadID,
-          event.messageID
-        );
-      } else {
-        return api.sendMessage(`❌ Error:\n${result.message}`, event.threadID, event.messageID);
-      }
-    } catch (e) {
-      return api.sendMessage(`🚫 API Error: ${e.message}`, event.threadID, event.messageID);
-    }
-  }
-
-  // ✅ List Command
-  if (command === "list") {
-    try {
-      const res = await axios.get(`${apiLink}?list=true`);
-      const result = res.data;
-
-      if (result.success) {
-        const list = result.monitors;
-        if (list.length === 0) {
-          return api.sendMessage(`❌ No monitor found.`, event.threadID, event.messageID);
-        }
-
-        const msg = list
-          .map(
-            (item, index) =>
-              `${index + 1}. 🌐 ${item.name}\n` +
-              `🔗 ${item.url}\n` +
-              `🆔 ID: ${item.id}\n` +
-              `📶 Status: ${
-                item.status == 2
-                  ? "🟢 Up"
-                  : item.status == 9
-                  ? "🔴 Down"
-                  : "⚪️ Paused"
-              }\n`
-          )
-          .join("\n");
-
-        return api.sendMessage(`📜 Monitor List:\n\n${msg}`, event.threadID, event.messageID);
-      } else {
-        return api.sendMessage(`❌ Error:\n${result.message}`, event.threadID, event.messageID);
-      }
-    } catch (e) {
-      return api.sendMessage(`🚫 API Error: ${e.message}`, event.threadID, event.messageID);
-    }
-  }
-
-  // ✅ Create Command
-  const name = args[0];
-  const url = args[1];
-
-  if (!url || !url.startsWith("http")) {
-    return api.sendMessage(
-      "❌ Please provide name and valid URL.\nUsage: upt [name] [url]",
-      event.threadID,
-      event.messageID
-    );
-  }
-
-  try {
-    const res = await axios.get(`${apiLink}?url=${encodeURIComponent(url)}&name=${encodeURIComponent(name)}`);
-    const result = res.data;
-
-    if (result.success) {
-      const data = result.data;
-      return api.sendMessage(
-        `✅ Monitor Created!\n──────────────\n` +
-          `🆔 ID: ${data.id}\n` +
-          `📛 Name: ${data.name}\n` +
-          `🔗 URL: ${data.url}\n` +
-          `⏰ Interval: ${data.interval} minutes\n` +
-          `📶 Status: ${
-            data.status == 2
-              ? "🟢 Up"
-              : data.status == 9
-              ? "🔴 Down"
-              : "⚪️ Paused"
-          }`,
-        event.threadID,
-        event.messageID
-      );
-    } else {
-      return api.sendMessage(`❌ Error:\n${result.message}`, event.threadID, event.messageID);
-    }
-  } catch (e) {
-    return api.sendMessage(`🚫 API Error: ${e.message}`, event.threadID, event.messageID);
-  }
-};
+//////////////////////////////
+//////// Khai báo ///////////
+////////////////////////////
+module.exports.onLoad = () => {
+ const fs = require("fs-extra");
+ const request = require("request");
+ const lvb = __dirname + `/noprefix/`;
+ if (!fs.existsSync(lvb + "noprefix")) fs.mkdirSync(lvb, { recursive: true });
+ if (!fs.existsSync(lvb + "upt.png")) request("https://i.imgur.com/vn4rXA4.jpg").pipe(fs.createWriteStream(lvb + "upt.png"));
+ }
+module.exports.run = async function({ api, event, args, client }) {
+ const fs = require('fs-extra');
+ let time = process.uptime();
+ let hours = Math.floor(time / (60 * 60));
+ let minutes = Math.floor((time % (60 * 60)) / 60);
+ let seconds = Math.floor(time % 60);
+ const timeStart = Date.now();
+ var name = Date.now();
+ var url = (event.type == "message_reply") ? event.messageReply.body : args.join(" ");
+ var lvbang = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+ if(url.match(lvbang) == null) return api.sendMessage({body:`╭•┄┅═══❁🌺❁═══┅┄•╮\n🕧 𝗨𝗣𝗧𝗜𝗠𝗘 𝗥𝗢𝗕𝗢𝗧 🕧\n╰•┄┅═══❁🌺❁═══┅┄•╯\n\n𝗗𝗢𝗨𝗚𝗛 𝗧𝗜𝗠𝗥 𝗖𝗨𝗥𝗥𝗘𝗡𝗧𝗟𝗬 𝗢𝗡𝗟𝗜𝗡𝗘 𝗜𝗡 𝗧𝗢𝗧𝗔𝗟 ${hours} 𝗛𝗢𝗨𝗥𝗦 ${minutes} 𝗠𝗜𝗡𝗨𝗧𝗘 ${seconds} 𝗦𝗘𝗖𝗢𝗡𝗗 👾\n⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆\nPlease enter/replit the url to post on Uptime Robot`, attachment: fs.createReadStream(__dirname + `/noprefix/upt.png`)}, event.threadID, event.messageID);
+ var request = require("request");
+ var options = { method: 'POST',
+ url: 'https://api.uptimerobot.com/v2/newMonitor',
+ headers:
+ { 'content-type': 'application/x-www-form-urlencoded',
+ 'noprefix-control': 'no-noprefix' },
+ form:
+ { api_key: 'u2008156-9837ddae6b3c429bd0315101',
+ format: 'json',
+ type: '1',
+ url: url,
+ friendly_name: name } };
+ ///////////////////////////////////////// //////Phần điều kiện và gửi tin nhắn//// /////////////////////////////////////// 
+request(options, function (error, response, body) {
+ if (error) return api.sendMessage(`Lỗi rồi huhu :((`, event.threadID, event.messageID );
+ if(JSON.parse(body).stat == 'fail') return api.sendMessage({body:`╭•┄┅════❁🌺❁════┅┄•╮\n🕧𝗨𝗣𝗧𝗜𝗠𝗘 𝗥𝗢𝗕𝗢𝗧🕧\n╰•┄┅════❁🌺❁════┅┄•╯\n\n𝗗𝗢𝗨𝗚𝗛 𝗧𝗜𝗠𝗥 𝗖𝗨𝗥𝗥𝗘𝗡𝗧𝗟𝗬 𝗢𝗡𝗟𝗜𝗡𝗘 𝗜𝗡 𝗧𝗢𝗧𝗔𝗟 ${hours} 𝗛𝗢𝗨𝗥𝗦 ${minutes} 𝗠𝗜𝗡𝗨𝗧𝗘 ${seconds} 𝗦𝗘𝗖𝗢𝗡𝗗 👾\n⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆\n｢ 𝗘𝗥𝗥𝗢𝗥 ｣ - 𝗨𝗣𝗧𝗜𝗠𝗘 𝗧𝗛𝗘 𝗥𝗢𝗕𝗢𝗧 𝗠𝗢𝗡𝗜𝗧𝗢𝗥 𝗔𝗟𝗥𝗘𝗗𝗬 𝗧𝗛𝗜𝗦 𝗖𝗨𝗥𝗥𝗘𝗡𝗧𝗟𝗬 𝗘𝗫𝗜𝗦𝗧𝗦 𝗢𝗡✨🌺\n🔗 𝐋𝐈𝐍𝐊: ${url}`, attachment: fs.createReadStream(__dirname + `/noprefix/upt.png`)}, event.threadID, event.messageID);
+ if(JSON.parse(body).stat == 'success')
+ return
+api.sendMessage({body: `╭•┄┅════❁🌺❁════┅┄•╮\n🕧𝗨𝗣𝗧𝗜𝗠𝗘 𝗥𝗢𝗕𝗢𝗧🕧\n╰•┄┅════❁🌺❁════┅┄•╯\n\n𝗗𝗢𝗨𝗚𝗛 𝗧𝗜𝗠𝗥 𝗖𝗨𝗥𝗥𝗘𝗡𝗧𝗟𝗬 𝗢𝗡𝗟𝗜𝗡𝗘 𝗜𝗡 𝗧𝗢𝗧𝗔𝗟 ${hours} 𝗛𝗢𝗨𝗥𝗦 ${minutes} 𝗠𝗜𝗡𝗨𝗧𝗘 ${seconds} 𝗦𝗘𝗖𝗢𝗡𝗗 👾\n⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆\n｢ 𝗦𝗨𝗖𝗖𝗘𝗦𝗦 ｣ - 𝗦𝗨𝗖𝗖𝗘𝗦𝗦 𝗨𝗣𝗧𝗜𝗠𝗘 𝗥𝗢𝗕𝗢𝗧 𝗖𝗥𝗘𝗔𝗧𝗘 𝗦𝗘𝗥𝗩𝗘𝗥 𝗔𝗕𝗢𝗩𝗘 ✨🌺\n🔗 𝐋𝐈𝐍𝐊: ${url}`, attachment: fs.createReadStream(__dirname + `/noprefix/upt.png`)}, event.threadID, event.messageID );
+});
+ }
