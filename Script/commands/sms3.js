@@ -27,7 +27,7 @@ module.exports.run = async ({ api, event, args }) => {
   }
  
   if (!/^01[0-9]{9}$/.test(number)) {
-    return api.sendMessage("•┄┅════❁🌺❁════┅┄•\n\n☠️••SMS BOMBER BY —͟͟͞͞𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️💣\n\nব্যবহার:\n/sms 01xxxxxxxxx\n\n(বাংলাদেশি নাম্বার দিন, শুধু মজার জন্য ব্যবহার করুন)\n\n•┄┅════❁🌺❁════┅┄•", threadID);
+    return api.sendMessage("•┄┅════❁🌺❁════┅┄•\n\nSMS BOMBER 3\n\nব্যবহার:\n.sms number\n\n(BD Number Only)\n\n•┄┅════❁🌺❁════┅┄•", threadID);
   }
  
   if (bombingFlags[threadID]) {
