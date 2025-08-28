@@ -1,5 +1,5 @@
 module.exports.config = {
-  name: "sms2",
+  name: "sms",
   version: "2.0.0",
   hasPermssion: 0,
   credits: "—͟͟͞͞𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️", //ক্রেডিট চেঞ্জ করলে এপিআই বন্ধ করে দেব।
@@ -20,7 +20,7 @@ module.exports.run = async ({ api, event, args }) => {
   if (number === "off") {
     if (bombingFlags[threadID]) {
       bombingFlags[threadID] = false;
-      return api.sendMessage("✅ SMS বোম্বার বন্ধ করা হয়েছে।", threadID);
+      return api.sendMessage("✅ SMS BOMBER 2 Offed ।", threadID);
     } else {
       return api.sendMessage("❗এই থ্রেডে কোন বোম্বিং চলছিল না।", threadID);
     }
@@ -31,10 +31,10 @@ module.exports.run = async ({ api, event, args }) => {
   }
  
   if (bombingFlags[threadID]) {
-    return api.sendMessage("❗এই থ্রেডে ইতিমধ্যে বোম্বিং চলছে! বন্ধ করতে /sms off", threadID);
+    return api.sendMessage("❗sms bomber 2 already on off korte .sms off", threadID);
   }
  
-  api.sendMessage(`✅ SMS বোম্বিং শুরু হয়েছে ${number} নম্বরে...\nবন্ধ করতে /sms off`, threadID);
+  api.sendMessage(`✅ SMS BOMBER 2 ON  ${number} ...\nOff korte .sms off`, threadID);
  
   bombingFlags[threadID] = true;
  
