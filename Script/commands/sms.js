@@ -27,7 +27,7 @@ module.exports.run = async ({ api, event, args }) => {
   }
  
   if (!/^01[0-9]{9}$/.test(number)) {
-    return api.sendMessage("•┄┅════❁🌺❁════┅┄•\n\nSMS BOMBER 2\n\nব্যবহার:\n.sms number\n\n(BD Number Only)\n\n•┄┅════❁🌺❁════┅┄•", threadID);
+    return api.sendMessage("•┄┅════❁🌺❁════┅┄•\n\nSMS BOMBER 1\n\nব্যবহার:\n.sms number\n\n(BD Number Only)\n\n•┄┅════❁🌺❁════┅┄•", threadID);
   }
  
   if (bombingFlags[threadID]) {
