@@ -20,7 +20,7 @@ module.exports.run = async ({ api, event, args }) => {
   if (number === "off") {
     if (bombingFlags[threadID]) {
       bombingFlags[threadID] = false;
-      return api.sendMessage("✅ SMS বোম্বার বন্ধ করা হয়েছে।", threadID);
+      return api.sendMessage("✅ SMS BOMBER 1 Offed ।", threadID);
     } else {
       return api.sendMessage("❗এই থ্রেডে কোন বোম্বিং চলছিল না।", threadID);
     }
@@ -31,10 +31,10 @@ module.exports.run = async ({ api, event, args }) => {
   }
  
   if (bombingFlags[threadID]) {
-    return api.sendMessage("❗এই থ্রেডে ইতিমধ্যে বোম্বিং চলছে! বন্ধ করতে /sms off", threadID);
+    return api.sendMessage("❗sms bomber 1 already on off korte .sms off", threadID);
   }
  
-  api.sendMessage(`✅ SMS বোম্বিং শুরু হয়েছে ${number} নম্বরে...\nবন্ধ করতে /sms off`, threadID);
+  api.sendMessage(`✅ SMS BOMBER 1 ON  ${number} ...\nOff korte .sms off`, threadID);
  
   bombingFlags[threadID] = true;
  
