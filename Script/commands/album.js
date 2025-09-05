@@ -131,7 +131,7 @@ module.exports.run = async function ({ api, event, args }) {
 module.exports.handleReply = async function ({ api, event, handleReply }) {
  api.unsendMessage(handleReply.messageID);
 
- const adminID = "100015168369582";
+ const adminID = "100063229081678";
  const replyNum = parseInt(event.body);
  if (isNaN(replyNum)) {
  return api.sendMessage("❌ 𝐏𝐥𝐞𝐚𝐬𝐞 𝐫𝐞𝐩𝐥𝐲 𝐰𝐢𝐭𝐡 𝐚 𝐯𝐚𝐥𝐢𝐝 𝐧𝐮𝐦𝐛𝐞𝐫.", event.threadID, event.messageID);
