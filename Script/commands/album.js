@@ -29,7 +29,7 @@ module.exports.config = {
  category: "Media",
  commandCategory: "Media",
  usages: "Empty to see list, or album [category] to get media.",
- cooldowns: 5,
+ cooldowns: 1,
 };
 
 module.exports.run = async function ({ api, event, args }) {
