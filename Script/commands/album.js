@@ -2,13 +2,27 @@ const axios = require("axios");
 const path = require("path");
 const fs = require("fs");
 
-const BASE_API_URL = "https://album-api-1ez5.onrender.com";
+const API_CONFIG_URL = "https://raw.githubusercontent.com/cyber-ullash/cyber-ullash/refs/heads/main/UllashApi.json";
+
+const getApiUrl = async () => {
+    try {
+        const response = await axios.get(API_CONFIG_URL);
+        const albumUrl = response.data.album;
+        if (!albumUrl) {
+            throw new Error("Album API URL not found in the JSON data.");
+        }
+        return albumUrl;
+    } catch (error) {
+        console.error("API URL :", error);
+        throw new Error("API URL");
+    }
+};
 
 module.exports.config = {
  name: "album",
  version: "1.0.1",
  hasPermssion: 0,
- credits: "Ullash", //file credits dipto 
+ credits: "Ullash",
  description: "Manage and view video/photo albums",
  usePrefix: true,
  prefix: true,
@@ -167,6 +181,7 @@ module.exports.handleReply = async function ({ api, event, handleReply }) {
  };
 
  try {
+ const BASE_API_URL = await getApiUrl();
  const res = await axios.get(`${BASE_API_URL}/album?type=${selectedCategory}`);
  const mediaUrl = res.data.data;
 
