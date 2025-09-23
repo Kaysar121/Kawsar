@@ -9,7 +9,7 @@ module.exports.config = {
  usePrefix: false,
  commandCategory: "Game",
  usages: "quiz [h]",
- cooldowns: 5,
+ cooldowns: 1,
  dependencies: { "axios": "" }
 };
 
@@ -32,7 +32,7 @@ module.exports.run = async function ({ api, event, args, Currencies }) {
  `➤ Command: quiz\n` +
  `➤ Correct Answer: +500000 Coins\n` +
  `➤ Wrong Answer: -500 Coins\n` +
- `➤ Minimum 1 Coins required to play\n` +
+ `➤ Minimum 0 Coins required to play\n` +
  `➤ 20 seconds to answer\n\n` +
  `⚡ Good Luck!`, threadID, messageID
  );
